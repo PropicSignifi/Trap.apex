@@ -1,0 +1,131 @@
+---
+title: "Home"
+description: "
+Trap.apex is a versatile functional reactive library to handle Salesforce triggers."
+---
+
+{namespace pageIndex}
+
+/**
+ */
+{template .render}
+	{@param site: ?}
+
+	{call main.render data="all"}
+		{param content kind="html"}
+			{call .header data="all" /}
+			{call .why /}
+			{call .features /}
+			{call .how /}
+			{call .highlights /}
+			{call Footer.render data="all" /}
+		{/param}
+	{/call}
+{/template}
+
+/**
+ */
+{template .header}
+	{@param site: ?}
+
+	<header class="header">
+		<div class="container">
+			<h1 class="header-title">{$site.title}</h1>
+			<h2 class="header-subtitle">{$site.index.description}</h2>
+			<div class="btn-group">
+				<a href="/trap-apex/tutorials/getting_started/step_1.html" class="btn btn-accent btn-sm">Get Started</a>
+				<a href="https://github.com/Click-to-Cloud/Trap.apex/" class="btn btn-success btn-sm">GitHub</a>
+				<a href="/" onclick="location.assign('/')" class="btn btn-default btn-sm">Not Interested</a>
+			</div>
+		</div>
+	</header>
+{/template}
+
+/**
+ */
+{template .why}
+	<article class="about">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-2">
+					<h3 class="about-title">Why Trap.apex?</h3>
+					<p class="about-description">Trap.apex takes its name from 'trigger the trap', which aims to become the delicate device that takes care of Salesforce triggers. Besides adopting the trigger best practices from the community, Trap.apex distinguishes itself from other trigger frameworks in its stream-based trigger execution and rich features.</p>
+				</div>
+			</div>
+		</div>
+	</article>
+{/template}
+
+/**
+ */
+{template .features}
+	<div class="features">
+		<div class="container">
+			<div class="row">
+				<section class="feature col-md-4 col-md-offset-2">
+					<h3 class="feature-title">FRP Style</h3>
+					<p class="feature-description">Trap.apex adopts the functional reactive style to process trigger logic.</p>
+				</section>
+				<section class="feature col-md-4">
+					<h3 class="feature-title">Trigger Control</h3>
+					<p class="feature-description">Trap.apex offers fine control over trigger handlers.</p>
+				</section>
+				<section class="feature col-md-4">
+					<h3 class="feature-title">Adaptive</h3>
+					<p class="feature-description">Trap.apex can be used with other trigger frameworks.</p>
+				</section>
+			</div>
+		</div>
+	</div>
+{/template}
+
+/**
+ */
+{template .how}
+	<article class="about">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-2">
+					<h3 class="about-title">Triggers in Functional Style</h3>
+					<p class="about-description">Trap.apex is not a monster. It just puts your triggers into a functional style.</p>
+				</div>
+			</div>
+		</div>
+	</article>
+{/template}
+
+/**
+ */
+{template .highlights}
+	<div class="highlights">
+		<div class="container">
+			<section class="highlight row">
+				<div class="col-md-6 col-md-offset-2">
+					<h4 class="highlight-title">Stream Style</h4>
+					<p class="highlight-description">Trap.apex uses stream-based API to handle trigger logic.</p>
+				</div>
+				<div class="col-md-5 col-md-offset-1">
+					<img class="highlight-image" src="/trap-apex/images/highlight_1.png" alt="Stream Style" height="200">
+				</div>
+			</section>
+			<section class="highlight row">
+				<div class="col-md-6 col-md-push-9">
+					<h4 class="highlight-title">Trigger Control</h4>
+					<p class="highlight-description">Trap.apex executes fine controls over trigger handlers.</p>
+				</div>
+				<div class="col-md-5 col-md-offset-2 col-md-pull-6">
+					<img class="highlight-image" src="/trap-apex/images/highlight_2.png" alt="Trigger Control" height="200">
+				</div>
+			</section>
+			<section class="highlight row">
+				<div class="col-md-6 col-md-offset-2">
+					<h4 class="highlight-title">Easy Unit Test</h4>
+					<p class="highlight-description">Trap.apex makes it easy to do unit test with triggers.</p>
+				</div>
+				<div class="col-md-5 col-md-offset-1">
+					<img class="highlight-image" src="/trap-apex/images/highlight_3.png" alt="Easy Unit Test" height="200">
+				</div>
+			</section>
+		</div>
+	</div>
+{/template}
