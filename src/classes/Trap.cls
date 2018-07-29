@@ -721,19 +721,17 @@ public class Trap {
 
         // Activate the context
         void activate() {
+            Trap.currentTriggerContext = this;
             Trap controller = this.handler.getController();
+            if(controller == null) {
+                return;
+            }
             String name = this.handler.getName();
 
             controller.triggerContexts.add(this);
-            Trap.currentTriggerContext = this;
 
-            Integer maxDepth = -1;
-            Boolean usingNewTransaction = false;
-
-            if(controller != null) {
-                maxDepth = controller.getMaxReEntry(name);
-                usingNewTransaction = controller.isUsingNewTransaction(name);
-            }
+            Integer maxDepth = controller.getMaxReEntry(name);
+            Boolean usingNewTransaction = controller.isUsingNewTransaction(name);
 
             String recursionKey = this.triggerObject + '_' + this.triggerEvent;
             Integer depth = controller.recursionDepth.get(recursionKey);
@@ -764,15 +762,13 @@ public class Trap {
         // Handles error in the context
         void onError(Exception e) {
             Trap controller = this.handler.getController();
+            if(controller == null) {
+                return;
+            }
             String name = this.handler.getName();
 
-            Integer maxDepth = -1;
-            Boolean usingNewTransaction = false;
-
-            if(controller != null) {
-                maxDepth = controller.getMaxReEntry(name);
-                usingNewTransaction = controller.isUsingNewTransaction(name);
-            }
+            Integer maxDepth = controller.getMaxReEntry(name);
+            Boolean usingNewTransaction = controller.isUsingNewTransaction(name);
 
             String recursionKey = this.triggerObject + '_' + this.triggerEvent;
             Integer depth = controller.recursionDepth.get(recursionKey);
@@ -795,15 +791,14 @@ public class Trap {
         // Deactivate the context
         void deactivate() {
             Trap controller = this.handler.getController();
+            if(controller == null) {
+                Trap.currentTriggerContext = null;
+                return;
+            }
             String name = this.handler.getName();
 
-            Integer maxDepth = -1;
-            Boolean usingNewTransaction = false;
-
-            if(controller != null) {
-                maxDepth = controller.getMaxReEntry(name);
-                usingNewTransaction = controller.isUsingNewTransaction(name);
-            }
+            Integer maxDepth = controller.getMaxReEntry(name);
+            Boolean usingNewTransaction = controller.isUsingNewTransaction(name);
 
             String recursionKey = this.triggerObject + '_' + this.triggerEvent;
             Integer depth = controller.recursionDepth.get(recursionKey);
@@ -1303,6 +1298,8 @@ public class Trap {
                     this.afterUndelete(newSO);
                 }
             }
+
+            complete();
         }
 
         // Handle the SObjects
@@ -1320,6 +1317,19 @@ public class Trap {
                 bulkObj.oldStream.next(oldSO);
                 bulkObjAll.oldStream.next(oldSO);
             }
+        }
+
+        // Complete
+        private void complete() {
+            Event currentEvent = this.triggerContext.triggerEvent;
+            BulkObject bulkObj = this.bulkObjects.get(currentEvent);
+            BulkObject bulkObjAll = this.bulkObjects.get(Event.All);
+
+            bulkObj.newStream.complete();
+            bulkObjAll.newStream.complete();
+
+            bulkObj.oldStream.complete();
+            bulkObjAll.oldStream.complete();
         }
     }
 
@@ -1539,8 +1549,6 @@ public class Trap {
 
             fArgs.addAll(args);
 
-            System.debug(fArgs);
-
             return this.target.runN(fArgs);
         }
     }
@@ -1628,7 +1636,7 @@ public class Trap {
                 Object oldValue = Trap.F.getOld.run(target);
                 Object newValue = Trap.F.getNew.run(target);
 
-                return oldValue != newValue;
+                return f.run(oldValue) != f.run(newValue);
             }
 
             return false;

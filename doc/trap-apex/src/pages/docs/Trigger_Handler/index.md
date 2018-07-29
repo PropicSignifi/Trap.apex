@@ -241,7 +241,7 @@ public with sharing class CaseTrigger extends Other.TriggerHandler {
             .subscribe(Trap.F.addError.apply('test error'));
     }
 
-    public override void beforeInsert(SObject newSO) {
+    public override void bulkBefore() {
         handler.run();
     }
 }
